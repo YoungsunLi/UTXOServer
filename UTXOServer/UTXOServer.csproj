@@ -5,4 +5,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="RocksDbNative" Version="5.4.6.10" />
+    <PackageReference Include="RocksDbSharp" Version="5.4.6.10" />
+  </ItemGroup>
+
 </Project>
