@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace UTXOServer {
     class RocksDB {
@@ -25,6 +26,13 @@ namespace UTXOServer {
         */
 
         //Put
+        public void Put(string txid, string n, string blockIndex, string asset, string address, string value) {
+            using(RocksDb db = RocksDb.Open(options, path)) {
+                string key = txid + n;
+                string utxo = "{\"blockIndex\":\"" + blockIndex + "\",\"asset\":\"" + asset + "\",\"address\":\"" + address + "\",\"value\":\"" + value + "\"}";
+                db.Put(key, utxo);
+            }
+        }
         public void Put(byte[] key, byte[] value) {
             using(RocksDb db = RocksDb.Open(options, path)) {
                 db.Put(key, value);
@@ -42,6 +50,11 @@ namespace UTXOServer {
         }
 
         //Get
+        public JObject Get(string txid, string n) {
+            using(RocksDb db = RocksDb.Open(options, path)) {
+                return JObject.Parse(db.Get(txid + n));
+            }
+        }
         public long Get(byte[] key, byte[] buffer, long offset, long length) {
             using(RocksDb db = RocksDb.Open(options, path)) {
                 return db.Get(key, buffer, offset, length);
@@ -69,6 +82,11 @@ namespace UTXOServer {
         }
 
         //Remove
+        public void Remove(string txid, string n) {
+            using(RocksDb db = RocksDb.Open(options, path)) {
+                db.Remove(txid + n);
+            }
+        }
         public void Remove(byte[] key) {
             using(RocksDb db = RocksDb.Open(options, path)) {
                 db.Remove(key);
